@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게임 결과</title>
+  </head>
+  <body>
+    <h1>게임 종료</h1>
+    <div id="popup-coins">획득 코인: 0</div>
+    <!-- 획득 코인을 표시할 요소 -->
+
+    <script>
+      // URL에서 쿼리 파라미터 읽기
+      const urlParams = new URLSearchParams(window.location.search);
+      const gainedcoins = urlParams.get("gainedcoins");
+
+      // 획득한 코인 값을 팝업에 표시
+      document.getElementById(
+        "popup-coins"
+      ).textContent = `획득 코인: ${gainedcoins}`;
+    </script>
+  </body>
+</html>

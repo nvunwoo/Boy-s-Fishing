@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상점</title>
+    <script>
+      // 페이지 로드 시 플레이어 데이터 로드
+      window.onload = () => {
+        loadPlayerData(); // common.js에서 제공하는 데이터 로드 함수 호출
+        setCoins(30000);
+        updateCoinsUI(); // 코인 UI 업데이트
+      };
+
+      let currentRodIndex = 0;
+      let currentBoatIndex = 0;
+
+      const boats = [
+        {
+          name: "기본 배",
+          description: "배의 이동 속도 낮음",
+          price: 30000,
+          image: "images/shopboat1.png",
+        },
+        {
+          name: "중급 배",
+          description: "배의 이동 속도 보통",
+          price: 50000,
+          image: "images/shopboat2.png",
+        },
+        {
+          name: "고급 배",
+          description: "배의 이동 속도 빠름",
+          price: 100000,
+          image: "images/shopboat3.png",
+        },
+      ];
+
+      const rods = [
+        {
+          name: "기본 낚시대",
+          description: "얕은 수심에서 낚시 가능",
+          price: 10000,
+          image: "images/shopstick1.png",
+        },
+        {
+          name: "중급 낚시대",
+          description: "보통 수심에서 낚시 가능",
+          price: 50000,
+          image: "images/shopstick2.png",
+        },
+        {
+          name: "고급 낚시대",
+          description: "깊은 수심까지 낚시 가능",
+          price: 100000,
+          image: "images/shopstick3.png",
+        },
+      ];
+
+      function getCoins() {
+        return parseInt(localStorage.getItem("coins") || 120000); // 오류나면 이상한 숫자 띄우기;
+      }
+
+      function setCoins(value) {
+        localStorage.setItem("coins", value);
+      }
+
+      function updateCoinsUI() {
+        let currentCoins = getCoins(); // 코인 값을 가져옴
+        document.getElementById("currentCoins").innerText = currentCoins; // UI 업데이트
+        setCoins(currentCoins); // 로컬 스토리지 업데이트
+      }
+
+      function showSection(sectionId) {
+        updateCoinsUI(); // 섹션을 변경할 때마다 UI 업데이트
+        document.querySelectorAll(".aspect-ratio-box").forEach((section) => {
+          section.classList.add("hidden");
+        });
+        document.getElementById(sectionId).classList.remove("hidden");
+
+        // 배와 낚시대 초기화
+        if (sectionId === "boats") {
+          currentBoatIndex = 0; // 기본 배 인덱스 설정
+          updateBoat(); // 기본 배 정보 표시
+          updateCoinsUI();
+        } else if (sectionId === "rods") {
+          currentRodIndex = 0; // 기본 낚시대 인덱스 설정
+          updateRod(); // 기본 낚시대 정보 표시
+          updateCoinsUI();
+        }
+      }
+
+      function updateBoat() {
+        const boat = boats[currentBoatIndex];
+        const boatImageElement = document.getElementById("boatImage");
+        const boatDescriptionElement =
+          document.getElementById("boatDescription");
+        const buyButton = document.getElementById("buyBoatButton");
+
+        const ownedBoats = JSON.parse(localStorage.getItem("ownedBoats")) || [];
+        const isAlreadyOwned = ownedBoats.some(
+          (ownedBoat) => ownedBoat.name === boat.name
+        );
+
+        // 배 이미지와 설명 업데이트
+        if (boatImageElement && boatDescriptionElement) {
+          boatImageElement.src = boat.image;
+          boatImageElement.alt = boat.name;
+          boatDescriptionElement.innerText = `설명: ${boat.description}`;
+        }
+
+        // 버튼 텍스트 및 상태 업데이트
+        if (buyButton) {
+          if (isAlreadyOwned) {
+            buyButton.classList.add("sold-out");
+            buyButton.innerText = "보유";
+            buyButton.disabled = true;
+          } else {
+            buyButton.classList.remove("sold-out");
+            buyButton.innerText = `${boat.price}`;
+            buyButton.disabled = false;
+          }
+        }
+      }
+
+      // 새로운 배를 구매하고 소유 목록에 추가하는 함수
+      function buyBoat(boat) {
+        let currentCoins = getCoins;
+        const ownedBoats = JSON.parse(localStorage.getItem("ownedBoats")) || []; // 현재 보유 배 목록
+
+        // 이미 보유한 배인지 확인
+        const isAlreadyOwned = ownedBoats.some(
+          (ownedBoat) => ownedBoat.name === boat.name
+        );
+
+        if (isAlreadyOwned) {
+          alert("이미 보유한 배입니다.");
+          return;
+        }
+
+        // 코인이 부족한 경우
+        if (currentCoins < boat.price) {
+          alert("잔액이 부족합니다.");
+          return;
+        }
+
+        // 구매 진행
+        alert(`${boat.name}를 구매하였습니다.`);
+        localStorage.setItem("coins", currentCoins - boat.price); // 새로운 코인 값 저장
+        ownedBoats.push(boat); // 보유 배 목록에 추가
+        localStorage.setItem("ownedBoats", JSON.stringify(ownedBoats)); // 업데이트된 목록 저장
+        updateCoinsUI(); // 코인 업데이트
+        updateBoat(); // 배 UI 업데이트
+      }
+
+      // 새로운 낚시대를 구매하고 소유 목록에 추가하는 함수
+      function buyRod(rod) {
+        let currentCoins = getCoins;
+        const ownedRods = JSON.parse(localStorage.getItem("ownedRods")) || []; // 현재 보유 낚시대 목록
+
+        // 이미 보유한 낚시대인지 확인
+        const isAlreadyOwned = ownedRods.some(
+          (ownedRod) => ownedRod.name === rod.name
+        );
+
+        if (isAlreadyOwned) {
+          alert("이미 보유한 낚시대입니다.");
+          return;
+        }
+
+        // 코인이 부족한 경우
+        if (currentCoins < rod.price) {
+          alert("잔액이 부족합니다.");
+          return;
+        }
+
+        // 구매 진행
+        alert(`${rod.name}를 구매하였습니다.`);
+        localStorage.setItem("coins", currentCoins - rod.price); // 새로운 코인 값 저장
+        ownedRods.push(rod); // 보유 낚시대 목록에 추가
+        localStorage.setItem("ownedRods", JSON.stringify(ownedRods)); // 업데이트된 목록 저장
+        updateCoinsUI(); // 코인 업데이트
+        updateRod(); // 낚시대 UI 업데이트
+      }
+
+      // 낚시대 UI 업데이트 함수
+      function updateRod() {
+        const rod = rods[currentRodIndex];
+        const rodImageElement = document.getElementById("rodImage");
+        const rodDescriptionElement = document.getElementById("rodDescription");
+        const buyButton = document.getElementById("buyRodButton");
+
+        // 낚시대 이미지와 설명 업데이트
+        if (rodImageElement && rodDescriptionElement) {
+          rodImageElement.src = rod.image;
+          rodImageElement.alt = rod.name;
+          rodDescriptionElement.innerText = `설명: ${rod.description}`;
+        }
+
+        // 버튼 텍스트 및 상태 업데이트
+        if (buyButton) {
+          if (rod.sold) {
+            buyButton.classList.add("sold-out");
+            buyButton.innerText = "보유";
+            buyButton.disabled = true;
+          } else {
+            buyButton.classList.remove("sold-out");
+            buyButton.innerText = `${rod.price}`;
+            buyButton.disabled = false;
+          }
+        }
+      }
+
+      function prevRod() {
+        if (currentRodIndex > 0) {
+          currentRodIndex--;
+          updateRod();
+        }
+      }
+
+      function nextRod() {
+        if (currentRodIndex < rods.length - 1) {
+          currentRodIndex++;
+          updateRod();
+        }
+      }
+
+      function prevBoat() {
+        if (currentBoatIndex > 0) {
+          currentBoatIndex--;
+          updateBoat();
+        }
+      }
+
+      function nextBoat() {
+        if (currentBoatIndex < boats.length - 1) {
+          currentBoatIndex++;
+          updateBoat();
+        }
+      }
+
+      // 착용 중인 배를 변경하고 화면을 업데이트하는 함수
+      function equipBoat(boat) {
+        localStorage.setItem("equippedBoat", boat); // 착용 중인 배 변경
+        loadPlayerData(); // 화면 업데이트
+      }
+
+      // 착용 중인 낚시대를 변경하고 화면을 업데이트하는 함수
+      function equipRod(rod) {
+        localStorage.setItem("equippedRod", rod); // 착용 중인 낚시대 변경
+        loadPlayerData(); // 화면 업데이트
+      }
+    </script>
+
+    <style>
+      @font-face {
+        font-family: "NeoDGM";
+        src: url("./neodgm.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body,
+      html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: url("images/shop_background.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        font-family: "NeoDGM", sans-serif;
+      }
+
+      .aspect-ratio-box {
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .header h2 {
+        font-size: 32px;
+        color: white;
+        margin: 0;
+      }
+
+      .gold-display {
+        color: rgba(255, 255, 0, 0);
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .back-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 20px;
+        font-family: "NeoDGM", sans-serif;
+        transition: background-color 0.3s;
+      }
+
+      .back-button:hover {
+        background-color: #45a049;
+      }
+
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .button {
+        padding: 25px 40px;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        text-align: center;
+        width: 250px;
+        font-family: "NeoDGM", sans-serif;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .carousel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 30px;
+      }
+
+      .image-placeholder {
+        width: 240px;
+        height: 320px;
+        background-color: #d3d3d3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #555;
+        /*border: 1px solid #ccc;*/
+      }
+
+      .description {
+        margin-top: 20px;
+        font-size: 22px;
+        text-align: center;
+        color: white;
+      }
+
+      .buy-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        font-family: "NeoDGM", sans-serif;
+        transition: background-color 0.3s;
+      }
+
+      .buy-button.sold-out {
+        background-color: #d3d3d3;
+        cursor: not-allowed;
+      }
+
+      .buy-button:hover:not(.sold-out) {
+        background-color: #45a049;
+      }
+      /*보트와 낚시대 이미지 크기 제한*/
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      /* 모바일 환경 */
+      @media (max-width: 768px) {
+        .aspect-ratio-box {
+          width: 100vw;
+          height: calc(100vw * 16 / 9);
+        }
+      }
+
+      /* PC 환경 */
+      @media (min-width: 769px) {
+        .aspect-ratio-box {
+          height: 100vh;
+          width: calc(100vh * 9 / 16);
+          max-width: 100vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aspect-ratio-box" id="shop">
+      <div class="header">
+        <h2>상점창</h2>
+        <button class="back-button" onclick="window.location.href='home.html'">
+          뒤로가기
+        </button>
+      </div>
+      <div class="gold-display"></div>
+      <div class="button-container">
+        <button class="button" onclick="showSection('boats')">배</button>
+        <button class="button" onclick="showSection('rods')">낚시대</button>
+      </div>
+    </div>
+
+    <div class="aspect-ratio-box hidden" id="boats">
+      <div class="header">
+        <h2>배</h2>
+        <button class="back-button" onclick="showSection('shop')">
+          뒤로가기
+        </button>
+      </div>
+      <div class="gold-display"><span id="currentCoins"></span></div>
+      <div class="carousel">
+        <button onclick="prevBoat()">&#60;</button>
+        <div class="image-placeholder" id="boatImageContainer">
+          <img id="boatImage" src="" alt="배 이미지" />
+        </div>
+        <button onclick="nextBoat()">&#62;</button>
+      </div>
+      <div class="description" id="boatDescription">설명: 기본 배</div>
+      <button
+        class="buy-button"
+        id="buyBoatButton"
+        onclick="buyBoat(boats[currentBoatIndex])"
+      >
+        300000
+      </button>
+    </div>
+
+    <div class="aspect-ratio-box hidden" id="rods">
+      <div class="header">
+        <h2>낚시대</h2>
+        <button class="back-button" onclick="showSection('shop')">
+          뒤로가기
+        </button>
+      </div>
+      <div class="gold-display"><span id="currentCoins"></span></div>
+      <div class="carousel">
+        <button onclick="prevRod()">&#60;</button>
+        <div class="image-placeholder" id="rodImageContainer">
+          <img id="rodImage" src="" alt="낚시대 이미지" />
+        </div>
+        <button onclick="nextRod()">&#62;</button>
+      </div>
+      <div class="description" id="rodDescription">설명: 기본 낚시대</div>
+      <button
+        class="buy-button"
+        id="buyRodButton"
+        onclick="buyRod(rods[currentRodIndex])"
+      >
+        10000
+      </button>
+    </div>
+  </body>
+</html>

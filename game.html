@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>보이스피싱</title>
+    <link rel="stylesheet" href="gameStyle.css" />
+    <style>
+      /* 상단 디스플레이 컨테이너 */
+      .display-container {
+        position: absolute;
+        top: 10px; /* 화면 상단에 약간의 여백 */
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 1;
+      }
+
+      /* 디스플레이 항목 */
+      .display {
+        font-size: 18px;
+        color: black;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aspect-ratio-box">
+      <!-- 캐릭터와 낚시바늘 -->
+      <div class="character-container" id="character-container">
+        <img
+          src="images/TempPlayer.png"
+          alt="캐릭터"
+          class="character"
+          id="character"
+          style="left: 30%; transform: translateX(-50%)"
+        />
+        <img
+          src="images/fishHook.png"
+          alt="낚시바늘"
+          class="fish_hook"
+          id="fish_hook"
+          style="left: 50%; top: 100px"
+        />
+      </div>
+      <div class="content">
+        <!-- 상단 디스플레이 표시 -->
+        <div class="display-container">
+          <div id="time-display" class="display">남은 시간: 60</div>
+          <div id="gold-display" class="display">획득 코인: 0</div>
+        </div>
+        <!-- 하단 버튼 -->
+        <div class="button-container">
+          <button class="button" id="left-button">◀</button>
+          <button class="button" id="down-button">▼</button>
+          <button class="button" id="right-button">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <canvas
+      id="fishingLineCanvas"
+      style="position: absolute; top: 0; left: 0; z-index: 0"
+    ></canvas>
+
+    <script src="coin.js"></script>
+    <script src="fishes.js"></script>
+
+    <script>
+      let remainingTime = 60; // 남은 시간을 60초로 설정
+
+      function startCountdown() {
+        const timeDisplay = document.getElementById("time-display");
+
+        const countdown = setInterval(() => {
+          if (remainingTime > 0) {
+            remainingTime -= 1; // 남은 시간을 1초씩 줄임
+            timeDisplay.textContent = `남은 시간: ${remainingTime}`; // 화면에 표시
+          } else {
+            clearInterval(countdown); // 시간이 0이 되면 카운트다운 종료
+            timeDisplay.textContent = "시간 종료"; // 시간 종료 메시지 표시
+            showPopup();
+          }
+        }, 1000); // 1초마다 실행
+      }
+
+      function showPopup() {
+        const popup = window.open(
+          `result_popup.html?gainedcoins=${gainedcoins}`,
+          "a",
+          "width=400, height=300, left=100, top=50"
+        );
+
+        setTimeout(() => {
+          popup.close();
+
+          // 3초 뒤 home.html로 이동
+          setTimeout(() => {
+            window.location.href = "home.html";
+          }, 2000); // 3초 후 팝업 닫기
+        }, 2000); // 3초 후 팝업 닫기
+      }
+
+      // 페이지 로드 시 카운트다운 시작
+      window.onload = startCountdown;
+
+      const characterContainer = document.getElementById("character-container");
+      const fishHook = document.getElementById("fish_hook");
+      const canvas = document.getElementById("fishingLineCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let position = 30; // 초기 위치 (%)
+      let hookPosition = { x: 50, y: 100 }; // 낚시바늘 초기 위치
+      let characterPosition = { x: 30, y: 200 }; // 캐릭터 초기 위치
+      let moveInterval; // 이동 interval
+      let isMoving = false; // 이동 여부 확인
+
+      // 캔버스 크기 설정
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // 초기화 및 애니메이션 루프 시작
+      requestAnimationFrame(animationLoop);
+
+      function animationLoop() {
+        // 캔버스 초기화
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 낚시줄 그리기
+        drawFishingLine();
+
+        // 다음 프레임 요청
+        requestAnimationFrame(animationLoop);
+      }
+
+      // 낚시줄 그리기 함수
+      function drawFishingLine() {
+        // 낚시줄 시작점 (캐릭터 중심 위치)
+        const characterRect = characterContainer.getBoundingClientRect();
+        const hookRect = fishHook.getBoundingClientRect();
+
+        // 낚시줄의 시작점과 끝점 좌표
+        const startX = characterRect.left + characterRect.width / 2;
+        const startY = characterRect.top;
+        const endX = hookRect.left + hookRect.width / 2;
+        const endY = hookRect.top;
+
+        // 낚시줄 그리기
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = "black"; // 낚시줄 색상
+        ctx.lineWidth = 2; // 낚시줄 두께
+        ctx.stroke();
+      }
+
+      // 캐릭터와 낚시바늘 이동 함수
+      function moveCharacter(direction) {
+        if (direction === "left") {
+          position -= 1; // 왼쪽으로 이동
+          if (position < 0) position = 0;
+        } else if (direction === "right") {
+          position += 1; // 오른쪽으로 이동
+          if (position > 100) position = 100;
+        }
+        characterPosition.x = position; // 캐릭터 위치 업데이트
+        characterContainer.style.left = position + "%"; // 부모 컨테이너 이동
+      }
+
+      // 버튼이 눌렸을 때 이동 시작
+      function startMoving(direction) {
+        if (isMoving) return;
+        isMoving = true;
+        moveCharacter(direction); // 즉시 이동
+        moveInterval = setInterval(() => moveCharacter(direction), 50);
+      }
+
+      // 이동 중지
+      function stopMoving() {
+        clearInterval(moveInterval);
+        moveInterval = null;
+        isMoving = false;
+      }
+
+      // 낚시바늘 내려가기 함수
+      function dropFishHook() {
+        const initialTop = parseInt(window.getComputedStyle(fishHook).top, 10);
+        const dropDistance = 400; // 내려갈 거리(px)
+        let currentTop = initialTop;
+        const dropInterval = setInterval(() => {
+          currentTop += 5; // 낚시바늘 내려감
+          hookPosition.y = currentTop;
+          fishHook.style.top = currentTop + "px";
+
+          if (currentTop >= initialTop + dropDistance) {
+            clearInterval(dropInterval); // 목표 거리 도달 시 정지
+            liftFishHook(initialTop); // 낚시바늘 올리기
+          }
+        }, 20);
+      }
+
+      // 낚시바늘 올리기 함수
+      function liftFishHook(initialTop) {
+        let currentTop = parseInt(window.getComputedStyle(fishHook).top, 10);
+        const liftInterval = setInterval(() => {
+          currentTop -= 5; // 낚시바늘 올라감
+          hookPosition.y = currentTop;
+          fishHook.style.top = currentTop + "px";
+
+          if (currentTop <= initialTop) {
+            currentTop = initialTop; // 초기 위치로 정확하게 설정
+            fishHook.style.top = currentTop + "px"; // 정확한 위치로 이동
+            clearInterval(liftInterval); // 초기 위치로 돌아오면 정지
+          }
+        }, 20);
+      }
+
+      // 터치 이벤트 리스너 등록 (스마트폰에서 작동하도록 추가)
+      const leftButton = document.getElementById("left-button");
+      const rightButton = document.getElementById("right-button");
+      const downButton = document.getElementById("down-button");
+
+      // 터치 시작 시 이동 시작
+      leftButton.addEventListener("touchstart", () => startMoving("left"));
+      rightButton.addEventListener("touchstart", () => startMoving("right"));
+
+      // 터치 끝나면 이동 멈춤
+      leftButton.addEventListener("touchend", stopMoving);
+      rightButton.addEventListener("touchend", stopMoving);
+      leftButton.addEventListener("touchcancel", stopMoving);
+      rightButton.addEventListener("touchcancel", stopMoving);
+
+      // 버튼에서 손가락을 떼면 이동을 멈추게 하기 위해 mouse 이벤트를 touch로 대체
+      leftButton.addEventListener("mousedown", () => startMoving("left"));
+      rightButton.addEventListener("mousedown", () => startMoving("right"));
+      leftButton.addEventListener("mouseup", stopMoving);
+      rightButton.addEventListener("mouseup", stopMoving);
+      leftButton.addEventListener("mouseleave", stopMoving);
+      rightButton.addEventListener("mouseleave", stopMoving);
+
+      // 낚시바늘 동작
+      downButton.addEventListener("mousedown", dropFishHook);
+      downButton.addEventListener("touchstart", dropFishHook); // 터치로도 낚시바늘 동작
+
+      // 초기 낚시줄 그리기
+    </script>
+  </body>
+</html>

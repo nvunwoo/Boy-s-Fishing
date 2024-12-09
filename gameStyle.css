@@ -1,0 +1,132 @@
+/* 폰트 가져오기 */ 
+@font-face {
+  font-family: "NeoDGM";
+  src: url("neodgm.ttf") format("truetype");
+}
+
+/* 공통 스타일 */
+body,
+html {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url("images/play_background.png"); /* 배경 이미지 추가 */
+  background-size: cover; /* 화면에 꽉 차게 */
+  background-position: center; /* 이미지 가운데 정렬 */
+  background-repeat: no-repeat; /* 반복 방지 */
+  overflow: hidden;
+  font-family: "NeoDGM", sans-serif; /* 기본 폰트 설정 */
+}
+
+.aspect-ratio-box {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 캐릭터와 낚시바늘 컨테이너 */
+.character-container {
+  position: absolute;
+  top: 70px; /* 초기 위치 */
+  left: 30%; /* 화면 중앙에서 시작 */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: left 0.2s ease; /* 캐릭터 이동 애니메이션 */
+}
+
+/* 캐릭터 이미지 스타일 */
+.character {
+  max-width: 100px; /* 캐릭터 크기 조절 */
+  transition: left 0.2s ease; /* 이동 부드럽게 */
+}
+
+/* 낚시바늘 이미지 스타일 */
+.fish_hook {
+  position: absolute;
+  max-width: 20px; /* 낚시바늘 크기 조절 */
+  top: 100px; /* 캐릭터 아래쪽에서 시작 */
+  transition: top 0.2s ease; /* 낚시바늘 이동 부드럽게 */
+}
+
+/* 상단 시간 및 보유 골드 스타일 */
+.display-container {
+  display: flex;
+  flex-direction: row; /* 좌우 배치 */
+  gap: 20px;
+  margin-top: 10px; /* 상단 공간 추가 */
+  justify-content: center; /* 중앙 정렬 추가 */
+  width: 100%; /* 전체 너비 사용 */
+}
+
+.display {
+  padding: 5px 10px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "NeoDGM", sans-serif; /* 폰트 설정 추가 */
+  text-align: center;
+  background-color: #ffd700;
+  border: 3px solid #b8860b;
+  border-radius: 8px;
+  white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 하단 버튼 스타일 */
+.button-container {
+  display: flex;
+  gap: 40px; /* 버튼 간의 간격 */
+  margin-bottom: 20px; /* 하단 공간 추가 */
+  z-index: 2; /* 버튼을 캔버스 위로 */
+}
+
+.button {
+  padding: 25px 25px;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "NeoDGM", sans-serif; /* 폰트 설정 추가 */
+  color: white;
+  background-color: #418f43;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+  white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+/* 캔버스 스타일 */
+#fishingLineCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* 캔버스는 가장 아래로 */
+  pointer-events: none; /* 캔버스에서 클릭 이벤트를 비활성화 */
+}
+
+/* 모바일 환경 */
+@media (max-width: 768px) {
+  .aspect-ratio-box {
+    width: 100vw;
+    height: calc(100vw * 16 / 9);
+  }
+}
+
+@media (min-width: 769px) {
+  .aspect-ratio-box {
+    height: 100vh;
+    width: calc(100vh * 9 / 16);
+    max-width: 100vw;
+  }
+}

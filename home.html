@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>보이스피싱</title>
+
+    <script src="common.js"></script>
+    <script>
+      // 페이지 로드 시 플레이어 데이터 로드
+      window.onload = () => {
+        loadPlayerData(); // common.js에서 제공하는 데이터 로드 함수 호출
+      };
+    </script>
+
+    <style>
+      /* 폰트 가져오기 */
+      @font-face {
+        font-family: "NeoDGM";
+        src: url("neodgm.ttf") format("truetype");
+      }
+
+      /* 공통 스타일 */
+      body,
+      html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: url("images/StartBackground.png"); /* 배경 이미지 추가 */
+        background-size: cover; /* 화면에 꽉 차게 */
+        background-position: center; /* 이미지 가운데 정렬 */
+        background-repeat: no-repeat; /* 반복 방지 */
+        overflow: hidden;
+        font-family: "NeoDGM", sans-serif; /* 기본 폰트 설정 */
+      }
+
+      .aspect-ratio-box {
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* 로고 이미지 스타일 */
+      .logo {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        width: 350px;
+        height: auto;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; /* 내부 콘텐츠를 하단으로 배치 */
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* 하단 버튼 스타일 */
+      .button-container {
+        display: flex;
+        gap: 30px; /* 버튼 간의 간격 */
+        margin-bottom: 80px; /* 하단 공간 추가 */
+      }
+
+      .button {
+        width: 120px; /* 버튼의 고정 너비 설정 */
+        padding: 20px 0;
+        font-size: 25px;
+        font-family: "NeoDGM", sans-serif; /* 폰트 설정 추가 */
+        color: white;
+        background-color: #418f43;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-align: center;
+        white-space: nowrap; /* 줄바꿈 방지 */
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+
+      /* 모바일 환경 */
+      @media (max-width: 768px) {
+        .aspect-ratio-box {
+          width: 100vw;
+          height: calc(100vw * 16 / 9);
+        }
+      }
+
+      /* PC 환경 */
+      @media (min-width: 769px) {
+        .aspect-ratio-box {
+          height: 100vh;
+          width: calc(100vh * 9 / 16);
+          max-width: 100vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aspect-ratio-box">
+      <!-- 로고 이미지 추가 -->
+      <img src="images/gameLogoImage.png" alt="게임 로고" class="logo" />
+      <audio autoplay loop>
+        <source src="images/movingShip/mp3" type="audio/mp3" />
+      </audio>
+
+      <div class="content">
+        <!-- 하단 버튼 -->
+        <div class="button-container">
+          <button class="button" onclick="window.location.href='shop.html'">
+            상점
+          </button>
+          <button class="button" onclick="window.location.href='game.html'">
+            플레이
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
