@@ -87,11 +87,11 @@
 ## 🛠️ 개발 환경 | Tech Stack
 
 | 구성 요소 | 기술 |
-|-----------|------|
-| Language | JavaScript |
-| Version Control | Git / GitHub |
-| Documentation | Notion |
-| 협업 도구 | Discord |
+|:------:|:------:|
+| Language | ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) |
+| Version Control | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) |
+| Documentation | ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) |
+| Communication | ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white) |
 
 <br>
 
