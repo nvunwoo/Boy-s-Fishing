@@ -1,4 +1,4 @@
-# 🎮 Boy's Fishing
+# 🎣 Boy's Fishing
 
 <div align="center">
 
@@ -25,38 +25,47 @@
 
 <br>
 
-## 📸 스크린샷 | Screenshots
+## 🎥 게임 플레이 시연 | Gameplay Demo
 
 <div align="center">
 
-| 메인 화면 |
-|:------:|
-| <img src="images/stage11.gif" width="100%" height="auto"/> |
-| 설명1 |
-| <img src="images/stage12.gif" width="100%" height="auto"/> |
-| 설명2 |
+<table>
+  <tr>
+    <th colspan="2">메인 화면</th>
+  </tr>
+  <tr>
+    <td><img src="images/cover1.png" width="100%" height="auto"/></td>
+    <td><img src="images/cover2.png" width="100%" height="auto"/></td>
+  </tr>
+</table>
 
 [![Youtube](https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)]()
 
 <br>
 
-| 플레이 |
-|:------:|
-| <img src="images/stage11.gif" width="100%" height="auto"/> |
-| 설명1 |
-| <img src="images/stage12.gif" width="100%" height="auto"/> |
-| 설명2 |
+<table>
+  <tr>
+    <th colspan="2">게임 플레이</th>
+  </tr>
+  <tr>
+    <td><img src="images/cover1.png" width="100%" height="auto"/></td>
+    <td><img src="images/cover2.png" width="100%" height="auto"/></td>
+  </tr>
+</table>
 
 [![Youtube](https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)]()
 
 <br>
 
-| 상점 |
-|:------:|
-| <img src="images/stage11.gif" width="100%" height="auto"/> |
-| 설명1 |
-| <img src="images/stage12.gif" width="100%" height="auto"/> |
-| 설명2 |
+<table>
+  <tr>
+    <th colspan="2">상점 페이지</th>
+  </tr>
+  <tr>
+    <td><img src="images/cover1.png" width="100%" height="auto"/></td>
+    <td><img src="images/cover2.png" width="100%" height="auto"/></td>
+  </tr>
+</table>
 
 [![Youtube](https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)]()
 
@@ -64,7 +73,7 @@
 
 <br>
 
-## 🎮 SKY 팀원 소개
+## 🌤️ SKY 팀원 소개
 
 | Profile | Name | Major | Role | Development | GitHub |
 |:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
