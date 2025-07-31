@@ -77,7 +77,7 @@
 
 | Profile | Name | Major | Role | Development | GitHub |
 |:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
-| <img src="https://github.com/ooohyunwooo.png" width="60" height="60"> | **조현우** | 휴먼AI공학전공 | **팀장** & 발표 | 통합 & 게임 플레이 | [@ooohyunwooo](https://github.com/ooohyunwooo) |
+| <img src="https://github.com/nvunwoo.png" width="60" height="60"> | **조현우** | 휴먼AI공학전공 | **팀장** & 발표 | 통합 & 게임 플레이 | [@nvunwoo](https://github.com/nvunwoo) |
 | <img src="https://github.com/GreenXPudding.png" width="60" height="60"> | **김영찬** | 게임전공 | 아트 디자이너 | 게임 플레이 | [@GreenXPudding](https://github.com/GreenXPudding) |
 | <img src="https://github.com/???.png" width="60" height="60"> | **민준기** | 게임전공 | 사운드 디자이너 | 통합 & 서버 관리 | [@???](https://github.com/???) |
 | <img src="https://github.com/JungHwan-Oh707.png" width="60" height="60"> | **오정환** | 지능IOT융합전공 | 스토리 & 아트 디자이너 | 상점 페이지 | [@JungHwan-Oh707](https://github.com/JungHwan-Oh707) |
